@@ -9,6 +9,10 @@ class Bank {
         return await this.accountsRepo.createAccount(accountName, password);
     }
 
+    async getAccount(token) {
+        return await this.accountsRepo.getAccount(token);
+    }
+
     async getToken({accountName, password}) {
         return await this.accountsRepo.getToken(accountName, password);
     }

@@ -5,11 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "cli": "node cli.js"
+    "cli": "node cli.js",
+    "build-web": "babel ./web --out-dir ./public/js --presets react-app/dev",
+    "watch-web": "babel --watch ./web --out-dir ./public/js --presets react-app/dev",
+    "serve": "node ./app.js"
   },
   "author": "Matt McCredie",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "jest": "^23.6.0"
   },
   "dependencies": {

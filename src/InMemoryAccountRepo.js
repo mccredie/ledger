@@ -21,8 +21,13 @@ class InMemoryAccountRepo {
         }
     }
 
-    async hasAccount(id) {
-        return !!this.accounts[id];
+    async getAccount({id}) {
+        const account = this.accounts[id];
+        if (account) {
+            return {name: account.name};
+        } else {
+            throw new Error("NotFound")
+        }
     }
 
     async getToken(name, password) {

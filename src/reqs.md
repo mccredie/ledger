@@ -27,9 +27,13 @@ history
 
 
 TODO:
-  Get more UI, perhaps react
-  Error codes for backend
-  More unit testing
-  Validation for cli and web
-  README
+  * [x] Get more UI, perhaps react
+  * [ ] Consistent Error codes for backend
+  * [ ] Input validation / consistent
+  * [ ] minimal css styling
+  * [ ] More unit testing - at lest the other repo
+  * [ ] Validation for cli and web
+  * [ ] cli that uses rest apis
+  * [ ] test cli without tmux
+  * [ ] README
 

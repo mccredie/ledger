@@ -9,13 +9,14 @@ class InMemoryLedgerRepo {
         this.ledger = [];
     }
 
-    async createEntry({id}, {type, amount}) {
-        if (this.accountRepo.hasAccount(id)) {
+    async createEntry(token, {type, amount}) {
+        try {
+            this.accountRepo.getAccount(token);
             switch(type) {
                 case DEPOSIT:
                 case WITHDRAWL:
                     if (isValidAmount(amount)) {
-                        this.ledger.push({accountId: id, type, amount})
+                        this.ledger.push({accountId: token.id, type, amount});
                     } else {
                         throw new Error("ValidationError");
                     }
@@ -23,7 +24,7 @@ class InMemoryLedgerRepo {
                 default: 
                     throw new Error("ValidationError")
             }
-        } else {
+        } catch (e) {
             throw new Error("AccessDenied");
         }
     }
