@@ -5,32 +5,32 @@ class Bank {
         this.ledgerRepo = ledgerRepo;
     }
 
-    async createAccount({accountName, password}) {
-        return await this.accountsRepo.createAccount(accountName, password);
+    createAccount({accountName, password}) {
+        return this.accountsRepo.createAccount(accountName, password);
     }
 
-    async getAccount(token) {
-        return await this.accountsRepo.getAccount(token);
+    getAccount(token) {
+        return this.accountsRepo.getAccount(token);
     }
 
-    async getToken({accountName, password}) {
-        return await this.accountsRepo.getToken(accountName, password);
+    getToken({accountName, password}) {
+        return this.accountsRepo.getToken(accountName, password);
     }
 
-    async deposit(token, amount) {
-        return await this.ledgerRepo.createEntry(token, {type: 'deposit', amount});
+    deposit(token, amount) {
+        return this.ledgerRepo.createEntry(token, {type: 'deposit', amount});
     }
 
-    async withdraw(token, amount) {
-        return await this.ledgerRepo.createEntry(token, {type: 'withdrawl', amount});
+    withdraw(token, amount) {
+        return this.ledgerRepo.createEntry(token, {type: 'withdrawl', amount});
     }
 
-    async getBalance(token) {
-        return await this.ledgerRepo.getBalance(token);
+    getBalance(token) {
+        return this.ledgerRepo.getBalance(token);
     }
     
-    async getHistory(token) {
-        return await this.ledgerRepo.getEvents(token);
+    getHistory(token) {
+        return this.ledgerRepo.getEvents(token);
     }
 }
 

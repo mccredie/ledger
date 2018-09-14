@@ -12,9 +12,7 @@ const main = () => {
 
     const cli = new CommandLineInterface(bank);
 
-    (async () => {
-        await cli.run()
-    })();
+    cli.run();
 }
 
 if (require.main == module) {

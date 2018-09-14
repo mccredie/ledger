@@ -6,7 +6,7 @@ class InMemoryAccountRepo {
         this.accounts = [];
     }
 
-    async createAccount(name, password) {
+    createAccount(name, password) {
         const account = findAccount(this.accounts, name);
         if (!account) {
             const id = this.accounts.length;
@@ -21,7 +21,7 @@ class InMemoryAccountRepo {
         }
     }
 
-    async getAccount({id}) {
+    getAccount({id}) {
         const account = this.accounts[id];
         if (account) {
             return {name: account.name};
@@ -30,7 +30,7 @@ class InMemoryAccountRepo {
         }
     }
 
-    async getToken(name, password) {
+    getToken(name, password) {
         const account = findAccount(this.accounts, name);
         if (account && this.accounts[account.id].password === password) {
             return {id: account.id};

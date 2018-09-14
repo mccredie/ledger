@@ -29,12 +29,12 @@ class InMemoryLedgerRepo {
         }
     }
 
-    async getEvents({id}) {
+    getEvents({id}) {
        return {history: this.ledger.filter(entry => (entry.accountId == id))};
     }
 
-    async getBalance(token) {
-       const {history} = await this.getEvents(token);
+    getBalance(token) {
+       const {history} = this.getEvents(token);
        return {balance: history.reduce((total, entry) => {
             switch (entry.type) {
                 case DEPOSIT:

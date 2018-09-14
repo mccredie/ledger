@@ -33,7 +33,7 @@ class CommandLineInterface {
             }
         ]);
         try {
-            this.token = await (this.bank.getToken(creds));
+            this.token = this.bank.getToken(creds);
             return 'loggedInPrompt';
         } catch(e) {
             this.ui.log.write(`Error: ${e.message}`)
@@ -55,7 +55,7 @@ class CommandLineInterface {
             }
         ]);
         try {
-            await (this.bank.createAccount(creds));
+            this.bank.createAccount(creds);
             return 'loggedOutPrompt';
         } catch(e) {
             this.ui.log.write(`Error: ${e.message}`)
@@ -129,7 +129,7 @@ class CommandLineInterface {
             name: 'amount',
             message: 'How much would you like to deposit?'
         }])
-        await this.bank.deposit(this.token, Number.parseInt(amount));
+        this.bank.deposit(this.token, Number.parseInt(amount));
         return 'loggedInPrompt';
     }
 
@@ -139,18 +139,18 @@ class CommandLineInterface {
             name: 'amount',
             message: 'How much would you like to withdraw?'
         }])
-        await this.bank.withdraw(this.token, Number.parseInt(amount));
+        this.bank.withdraw(this.token, Number.parseInt(amount));
         return 'loggedInPrompt';
     }
 
     async viewBalance() {
-        const {balance} = await this.bank.getBalance(this.token);
+        const {balance} = this.bank.getBalance(this.token);
         this.ui.log.write(`You have $$${balance}\n`);
         return 'loggedInPrompt';
     }
 
     async viewHistory() {
-        const {history} = await this.bank.getHistory(this.token);
+        const {history} = this.bank.getHistory(this.token);
         let total = 0;
         const rows = history.map(({type, amount}) => {
             switch (type) {
