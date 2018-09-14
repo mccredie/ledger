@@ -35,11 +35,10 @@ describe("InMemoryAccountRepo", () => {
     let repo;
     const accountName = "myAccount";
     const password = "myPassword";
-    let existingAccount;
 
-    beforeEach(async () => {
+    beforeEach(() => {
         repo = new InMemoryAccountRepo();
-        existingAccount = repo.createAccount(accountName, password);
+        repo.createAccount(accountName, password);
     });
 
     it("should fail with an authentication error if the password is wrong", () => {
@@ -50,6 +49,22 @@ describe("InMemoryAccountRepo", () => {
     })
   })
   describe(".getAccount", () => {
+    let repo;
+    const accountName = "myAccount";
+    const password = "myPassword";
+    let existingAccount;
+    beforeEach(() => {
+        repo = new InMemoryAccountRepo();
+        existingAccount = repo.createAccount(accountName, password);
+    })
+    it("should retrieve the name for an account given a token", () => {
+        const token = repo.getToken(accountName, password);
+        const account = repo.getAccount(token);
 
+        expect(account).toEqual(existingAccount);
+    })
+    it("should thow error for invalid token", () => {
+        expect(() => repo.getAccount({id: 123})).toThrow(new Error("NotFound"));
+    })
   })
 })
