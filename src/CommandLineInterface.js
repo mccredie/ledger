@@ -13,6 +13,9 @@ class CommandLineInterface {
         try {
             for(;;) {
                 nextAction = await this[nextAction].call(this);
+                if (nextAction = 'quit') {
+                    break;
+                }
             }
         } catch(e) {
             this.ui.log.write(`Fatal Error: ${e.message}`);
@@ -29,6 +32,7 @@ class CommandLineInterface {
             {
                 type: 'password',
                 name: 'password',
+                mask: '*',
                 message: 'Enter account password:'
             }
         ]);
@@ -51,6 +55,7 @@ class CommandLineInterface {
             {
                 type: 'password',
                 name: 'password',
+                mask: '*',
                 message: 'Create a password:'
             }
         ]);
@@ -98,9 +103,10 @@ class CommandLineInterface {
             name: 'action',
             message: "What would you like to do?",
             choices: [
-                {name: 'Login to an existing account', value: 'login'} ,
+                {name: 'Login to an existing account', value: 'login'},
                 new inquirer.Separator(),
-                {name: 'Create a new account', value: 'createAccount'}
+                {name: 'Create a new account', value: 'createAccount'},
+                {name: 'Exit', value: 'quit'}
             ]
         }]);
         return action;
@@ -145,7 +151,7 @@ class CommandLineInterface {
 
     async viewBalance() {
         const {balance} = await this.bank.getBalance();
-        this.ui.log.write(`You have $$${balance}\n`);
+        this.ui.log.write(`You have $${balance}\n`);
         return 'loggedInPrompt';
     }
 
@@ -156,12 +162,12 @@ class CommandLineInterface {
             switch (type) {
                 case 'withdrawl':
                     total -= amount;
-                    return `${type}\t($$${amount})\t$$${total}\n`;
+                    return `${type}\t($${amount})\t$$${total}\n`;
                 case 'deposit':
                     total += amount;
-                    return `${type}\t\t$$${amount}\t$$${total}\n`;
+                    return `${type}\t\t$${amount}\t$$${total}\n`;
                 default:
-                    return `${type}\t\t--\t${total}\n`;
+                    return `${type}\t\t--\t$${total}\n`;
             } 
         })
         this.ui.log.write("Transaction\tAmount\tBalance\n");

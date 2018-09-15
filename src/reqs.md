@@ -30,11 +30,16 @@ TODO:
   * [x] Get more UI, perhaps react
   * [x] Remove all async stuff, since it isn't actually needed or used.
   * [x] Consistent Error codes for backend
-  * [ ] Input validation / consistent
+  * [x] cli that uses rest apis
+  * [x] test cli without tmux
+  * [x] command line arguments for cli
+  * [ ] Better server side validation
+  * [ ] Web/Forms validation
+  * [ ] CLI validation
   * [ ] minimal css styling
   * [ ] More unit testing - at lest the other repo
-  * [ ] Validation for cli and web
-  * [ ] cli that uses rest apis
-  * [ ] test cli without tmux
+  * [ ] make cli work with password fields
+  * [ ] logging for api
+  * [ ] look into removing cookie parser and url parser (I think they are built into express)
   * [ ] README
 
