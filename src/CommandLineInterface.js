@@ -20,7 +20,7 @@ class CommandLineInterface {
     }
 
     async login() {
-        const creds = await inquirer.prompt([
+        const {accountName, password} = await inquirer.prompt([
             {
                 type: 'input',
                 name: 'accountName',
@@ -33,7 +33,7 @@ class CommandLineInterface {
             }
         ]);
         try {
-            this.token = this.bank.getToken(creds);
+            this.token = this.bank.getToken(accountName, password);
             return 'loggedInPrompt';
         } catch(e) {
             this.ui.log.write(`Error: ${e.message}`)
@@ -42,7 +42,7 @@ class CommandLineInterface {
     }
 
     async createAccount() {
-        const creds = await inquirer.prompt([
+        const {accountName, password} = await inquirer.prompt([
             {
                 type: 'input',
                 name: 'accountName',
@@ -55,7 +55,7 @@ class CommandLineInterface {
             }
         ]);
         try {
-            this.bank.createAccount(creds);
+            this.bank.createAccount(accountName, password);
             return 'loggedOutPrompt';
         } catch(e) {
             this.ui.log.write(`Error: ${e.message}`)

@@ -9,32 +9,27 @@ class InMemoryLedgerRepo {
         this.ledger = [];
     }
 
-    async createEntry(token, {type, amount}) {
-        try {
-            this.accountRepo.getAccount(token);
-            switch(type) {
-                case DEPOSIT:
-                case WITHDRAWL:
-                    if (isValidAmount(amount)) {
-                        this.ledger.push({accountId: token.id, type, amount});
-                    } else {
-                        throw new Error("ValidationError");
-                    }
-                    break;
-                default: 
-                    throw new Error("ValidationError")
-            }
-        } catch (e) {
-            throw new Error("AccessDenied");
+    async createEntry(id, {type, amount}) {
+        switch(type) {
+            case DEPOSIT:
+            case WITHDRAWL:
+                if (isValidAmount(amount)) {
+                    this.ledger.push({accountId: id, type, amount});
+                } else {
+                    throw new Error("ValidationError");
+                }
+                break;
+            default: 
+                throw new Error("ValidationError")
         }
     }
 
-    getEvents({id}) {
+    getEvents(id) {
        return {history: this.ledger.filter(entry => (entry.accountId == id))};
     }
 
-    getBalance(token) {
-       const {history} = this.getEvents(token);
+    getBalance(id) {
+       const {history} = this.getEvents(id);
        return {balance: history.reduce((total, entry) => {
             switch (entry.type) {
                 case DEPOSIT:

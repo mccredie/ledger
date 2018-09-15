@@ -10,32 +10,32 @@ class InMemoryAccountRepo {
         const account = findAccount(this.accounts, name);
         if (!account) {
             const id = this.accounts.length;
-            this.accounts.push({
+            const newAccount = {
                 id: id,
                 name,
                 password
-            });
-            return {name};
+            };
+            this.accounts.push(newAccount);
+            return newAccount;
         } else {
-            throw new Error(`DuplicateAccount '${name}'`);
+            throw new Error('ValidationError');
         }
     }
 
-    getAccount({id}) {
+    getAccountById(id) {
         const account = this.accounts[id];
         if (account) {
-            return {name: account.name};
+            return account;
         } else {
             throw new Error("NotFound")
         }
     }
-
-    getToken(name, password) {
+    getAccountByName(name) {
         const account = findAccount(this.accounts, name);
-        if (account && this.accounts[account.id].password === password) {
-            return {id: account.id};
+        if (account) {
+            return account;
         } else {
-            throw new Error("AccessDenied");
+            throw new Error("NotFound");
         }
     }
 }
@@ -44,5 +44,3 @@ const findAccount = (accounts, name) => accounts.find(account => (account.name =
 
 
 module.exports = { InMemoryAccountRepo };
-
-

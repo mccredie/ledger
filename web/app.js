@@ -8,7 +8,7 @@ class App extends React.Component {
             balance: null,
             history: []
         }
-
+        
         this.handleUpdateAccount = this.handleUpdateAccount.bind(this);
     }
 
@@ -17,29 +17,32 @@ class App extends React.Component {
     }
 
     render() {
-        return <div>
-            {this.renderAccount()}
-            <CreateAccountForm />
-            {this.renderAccountDetails()}
-        </div>
-    }
-
-    renderAccount() {
         if (this.isLoggedIn()) {
-            return <p>Logged In as User <em>{this.state.accountName}</em> <a href="/logout">Logout</a></p>;
+            return <div>
+                <p>Logged In as User <em>{this.state.accountName}</em> <a href="/logout">Logout</a></p>
+                {this.renderAccountDetails()}
+            </div>;
         } else {
-            return <LoginAccountForm />;
+            let message = null;
+            if (this.props.fragment == 'loginfailed') {
+                message = <p><span>Login Failed</span></p>
+            }
+            return <div>
+                {message}
+                <LoginAccountForm />
+                <CreateAccountForm />
+            </div>;
         }
     }
 
     renderAccountDetails() {
-        if (this.isLoggedIn() && this.state.balance !== null) {
-            return [
-                <Balance balance={this.state.balance} />,
-                <History history={this.state.history} />,
-                <TransactionForm onAccountUpdated={this.handleUpdateAccount}></TransactionForm>
-            ];
-        }
+        return [
+            <History history={this.state.history} />,
+            <br />,
+            <Balance balance={this.state.balance} />,
+            <br />,
+            <TransactionForm onAccountUpdated={this.handleUpdateAccount}></TransactionForm>
+        ];
     }
 
     getAccount() {
@@ -71,9 +74,7 @@ class App extends React.Component {
         xhr.send();
 
         xhr.onloadend = (e) => {
-            console.log('balance loading');
             const resp = JSON.parse(xhr.response);
-            console.log(resp);
             if (typeof resp.balance !== 'undefined') {
                 this.setState(resp);
             }
@@ -153,7 +154,7 @@ class CreateAccountForm extends React.Component {
             return (<div>
                 <h2>Created Accounts</h2>
                 <ul>
-                    {this.state.createdAccounts.map(account => (<li>{account}</li>))}
+                    {this.state.createdAccounts.map(name => <li>{name}</li>)}
                 </ul>
             </div>);
         }
@@ -251,21 +252,34 @@ const Balance = ({balance}) => (
     <div>Balance <em>{balance}</em></div>
 );
 
-const History = ({history}) => (
-    <table>
+const History = ({history}) => {
+    let runningTotal = 0;
+    return <table>
         <tr>
+            <th>#</th>
             <th>Type</th>
-            <th>Amnount</th>
+            <th>Amount</th>
+            <th>Balance</th>
         </tr>
-        {history.map((entry, i) => (
-            <tr key={i}>
+        {history.map((entry, i) => {
+            switch(entry.type) {
+                case 'withdrawl':
+                    runningTotal -= entry.amount;
+                    break;
+                case 'deposit':
+                    runningTotal += entry.amount;
+                    break;
+            }
+            return <tr key={i}>
+                <td>{i}</td>
                 <td>{entry.type}</td>
-                <td>{entry.amount}</td>
+                <td>${entry.amount}</td>
+                <td>${runningTotal}</td>
             </tr>
-        ))}
-    </table>
-)
+        })}
+    </table>;
+}
 
-
+const fragment = window.location.hash.substr(1);
 let domContainer = document.querySelector('#app_container');
-ReactDOM.render(<App />, domContainer);
+ReactDOM.render(<App fragment={fragment}/>, domContainer);

@@ -29,7 +29,7 @@ history
 TODO:
   * [x] Get more UI, perhaps react
   * [x] Remove all async stuff, since it isn't actually needed or used.
-  * [ ] Consistent Error codes for backend
+  * [x] Consistent Error codes for backend
   * [ ] Input validation / consistent
   * [ ] minimal css styling
   * [ ] More unit testing - at lest the other repo
