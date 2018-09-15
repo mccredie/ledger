@@ -11,14 +11,18 @@ class RemoteBankProxy {
     }
 
     async createAccount(accountName, password) {
-        return await this.request.post(`${this.url}/api/account`, {body: {accountName, password}});
+        const account = await this.request.post(`${this.url}/api/account`, {body: {accountName, password}});
+        if (account.error) {
+            throw new Error(account.error);
+        }
+        return account;
     }
 
     async login(accountName, password) {
         await this.request.post(`${this.url}/login`, {body: {accountName, password}});
         const account = await this.getAccount();
-        if (!account.name) {
-            throw new Error("NotFound");
+        if (account.error) {
+            throw new Error(account.error);
         }
     }
     
@@ -27,19 +31,35 @@ class RemoteBankProxy {
     }
 
     async getAccount() {
-        return await this.request.get(`${this.url}/api/account`);
+        const account = await this.request.get(`${this.url}/api/account`);
+        if (account.error) {
+            throw new Error(account.error);
+        }
+        return account;
     }
 
     async createEntry(type, amount) {
-        return await this.request.post(`${this.url}/api/transactions`, {body: {type, amount}});
+        const entry = await this.request.post(`${this.url}/api/transactions`, {body: {type, amount}});
+        if (entry.error) {
+            throw new Error(entry.error);
+        }
+        return entry;
     }
 
     async getBalance() {
-        return await this.request.get(`${this.url}/api/balance`);
+        const balance = await this.request.get(`${this.url}/api/balance`);
+        if (balance.error) {
+            throw new Error(balance.error);
+        }
+        return balance;
     }
     
     async getHistory() {
-        return await this.request.get(`${this.url}/api/transactions`);
+        const history = await this.request.get(`${this.url}/api/transactions`);
+        if (history.error) {
+            throw new Error(history.error);
+        }
+        return history;
     }
 }
 

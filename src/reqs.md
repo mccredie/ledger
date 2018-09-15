@@ -33,13 +33,13 @@ TODO:
   * [x] cli that uses rest apis
   * [x] test cli without tmux
   * [x] command line arguments for cli
-  * [ ] Better server side validation
+  * [x] logging for api
+  * [x] Better server side validation
+  * [x] CLI validation
+  * [x] make cli work with password fields
   * [ ] Web/Forms validation
-  * [ ] CLI validation
   * [ ] minimal css styling
   * [ ] More unit testing - at lest the other repo
-  * [ ] make cli work with password fields
-  * [ ] logging for api
   * [ ] look into removing cookie parser and url parser (I think they are built into express)
   * [ ] README
 

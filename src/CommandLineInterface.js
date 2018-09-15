@@ -133,7 +133,9 @@ class CommandLineInterface {
         const {amount} = await inquirer.prompt([{
             type: 'input',
             name: 'amount',
-            message: 'How much would you like to deposit?'
+            message: 'How much would you like to deposit?',
+            validate: isPositiveInteger,
+            filter: parseInt
         }])
         await this.bank.createEntry('deposit', Number.parseInt(amount));
         return 'loggedInPrompt';
@@ -143,7 +145,9 @@ class CommandLineInterface {
         const {amount} = await inquirer.prompt([{
             type: 'input',
             name: 'amount',
-            message: 'How much would you like to withdraw?'
+            message: 'How much would you like to withdraw?',
+            validate: isPositiveInteger,
+            filter: parseInt
         }])
         await this.bank.createEntry('withdrawl', Number.parseInt(amount));
         return 'loggedInPrompt';
@@ -175,5 +179,9 @@ class CommandLineInterface {
         return 'loggedInPrompt';
     }
 }
+
+const isPositiveInteger = (value) => (
+    Number.isInteger(value) && value >= 0
+)
 
 module.exports = { CommandLineInterface };
