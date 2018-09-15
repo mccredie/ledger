@@ -128,7 +128,8 @@ class CreateAccountForm extends React.Component {
         this.state = {
             accountName: "",
             password: "",
-            createdAccounts: []
+            createdAccounts: [],
+            error: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -146,6 +147,7 @@ class CreateAccountForm extends React.Component {
             <input type="password" name="password" required={true} pattern="^.{4}.*$" onChange={this.handlePasswordChange} value={this.state.password}></input>
             <button>Create Account</button>
           </form>
+          {this.state.error? <p><em>Error Creating Account</em></p>: null}
           {this.renderCreated()}
         </div>);
     }
@@ -185,7 +187,11 @@ class CreateAccountForm extends React.Component {
 
         xhr.onloadend = (e) => {
             const account = JSON.parse(xhr.response);
-            this.setState({createdAccounts: this.state.createdAccounts.concat([account.name]), accountName: "", password: ""});
+            if (account.error) {
+                this.setState({error: true, accountName: "", password: ""});
+            } else {
+                this.setState({createdAccounts: this.state.createdAccounts.concat([account.name]), accountName: "", password: "", error: false});
+            }
         };
     }
 }
