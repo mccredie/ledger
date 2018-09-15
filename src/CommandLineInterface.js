@@ -2,8 +2,8 @@
 const inquirer = require('inquirer');
 
 class CommandLineInterface {
-    constructor(bank) {
-        this.bank = bank;
+    constructor(bankproxy) {
+        this.bank = bankproxy;
         this.token = null;
         this.ui = new inquirer.ui.BottomBar();
     }
@@ -33,7 +33,7 @@ class CommandLineInterface {
             }
         ]);
         try {
-            this.token = this.bank.getToken(accountName, password);
+            await this.bank.login(accountName, password);
             return 'loggedInPrompt';
         } catch(e) {
             this.ui.log.write(`Error: ${e.message}`)
@@ -55,7 +55,7 @@ class CommandLineInterface {
             }
         ]);
         try {
-            this.bank.createAccount(accountName, password);
+            await this.bank.createAccount(accountName, password);
             return 'loggedOutPrompt';
         } catch(e) {
             this.ui.log.write(`Error: ${e.message}`)
@@ -88,7 +88,7 @@ class CommandLineInterface {
     }
 
     async logout() {
-        this.token = null;
+        await this.bank.logout();
         return 'loggedOutPrompt';
     }
 
@@ -129,7 +129,7 @@ class CommandLineInterface {
             name: 'amount',
             message: 'How much would you like to deposit?'
         }])
-        this.bank.deposit(this.token, Number.parseInt(amount));
+        await this.bank.createEntry('deposit', Number.parseInt(amount));
         return 'loggedInPrompt';
     }
 
@@ -139,18 +139,18 @@ class CommandLineInterface {
             name: 'amount',
             message: 'How much would you like to withdraw?'
         }])
-        this.bank.withdraw(this.token, Number.parseInt(amount));
+        await this.bank.createEntry('withdrawl', Number.parseInt(amount));
         return 'loggedInPrompt';
     }
 
     async viewBalance() {
-        const {balance} = this.bank.getBalance(this.token);
+        const {balance} = await this.bank.getBalance();
         this.ui.log.write(`You have $$${balance}\n`);
         return 'loggedInPrompt';
     }
 
     async viewHistory() {
-        const {history} = this.bank.getHistory(this.token);
+        const {history} = await this.bank.getHistory();
         let total = 0;
         const rows = history.map(({type, amount}) => {
             switch (type) {

@@ -22,22 +22,10 @@ class Bank {
         return {name};
     }
 
-    createEntry(token, type, ammount) {
+    createEntry(token, type, amount) {
         return this.tokenAuthor.validateToken(
             token,
             (id) => this.ledgerRepo.createEntry(id, {type, amount}));
-    }
-
-    deposit(token, amount) {
-        return this.tokenAuthor.validateToken(
-            token,
-            (id) => this.ledgerRepo.createEntry(id, {type: 'deposit', amount}));
-    }
-
-    withdraw(token, amount) {
-        return this.tokenAuthor.validateToken(
-            token,
-            (id) => this.ledgerRepo.createEntry(id, {type: 'withdrawl', amount}));
     }
 
     getBalance(token) {

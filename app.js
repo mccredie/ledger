@@ -73,6 +73,10 @@ app.get('/logout', (req, res) => {
     }
 });
 
+app.get('/login', (req, res) => {
+    res.redirect('/');
+});
+
 app.post('/login', (req, res) => {
     try {
         const { accountName, password } = req.body;
