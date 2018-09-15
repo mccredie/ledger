@@ -13,7 +13,7 @@ class CommandLineInterface {
         try {
             for(;;) {
                 nextAction = await this[nextAction].call(this);
-                if (nextAction = 'quit') {
+                if (nextAction == 'quit') {
                     break;
                 }
             }

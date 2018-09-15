@@ -25,18 +25,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 const setErrorResponse = (error, res) => {
     switch(error.message) {
         case 'AccessDenied':
+            console.log(error.message);
             res.status(401);
             res.send({error: 'AccessDenied'});
             break;
         case 'NotFound':
+            console.log(error.message);
             res.status(404);
             res.send({error: 'NotFound'});
             break;
         case 'ValidationError':
+            console.log(error.message);
             res.status(400);
             res.send({error: 'ValidationError'});
             break;
         default:
+            console.log(error);
             res.status(500);
             res.send({error: 'InternalError'});
             break;
@@ -46,6 +50,7 @@ const setErrorResponse = (error, res) => {
 
 app.get('/api/account', (req, res) => {
     const token = req.cookies.token || {};
+    console.log(`get /api/account with token: ${JSON.stringify(token)}`);
     try {
         const account = bank.getAccount(token);
         res.send(account);
@@ -55,6 +60,7 @@ app.get('/api/account', (req, res) => {
 });
 
 app.post('/api/account', (req, res) => {
+    console.log(`post /api/account with: ${JSON.stringify(req.body)} -- create account`);
     try {
         const {accountName, password} = req.body;
         res.send(bank.createAccount(accountName, password));
@@ -65,6 +71,8 @@ app.post('/api/account', (req, res) => {
 
 
 app.get('/logout', (req, res) => {
+    const token = req.cookies.token || {};
+    console.log(`get /logout with token: ${JSON.stringify(token)} -- clearing cookies`);
     try {
         res.clearCookie('token', {path: '/'});
         res.redirect('/');
@@ -74,10 +82,12 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
+    console.log('get /login -- redirecting to /');
     res.redirect('/');
 });
 
 app.post('/login', (req, res) => {
+    console.log(`post /login with ${JSON.stringify(req.body)} -- generating token`);
     try {
         const { accountName, password } = req.body;
         const token = bank.getToken(accountName, password);
@@ -94,6 +104,7 @@ app.post('/login', (req, res) => {
 
 app.get('/api/balance', (req, res) => {
     const token = req.cookies.token || {};
+    console.log(`get /api/balance with token: ${JSON.stringify(token)}`);
     try {
         const balance = bank.getBalance(token);
         res.send(balance);
@@ -104,6 +115,7 @@ app.get('/api/balance', (req, res) => {
 
 app.get('/api/transactions', (req, res) => {
     const token = req.cookies.token || {};
+    console.log(`get /api/transactions with token: ${JSON.stringify(token)}`);
     try {
         const history = bank.getHistory(token);
         res.send(history);
@@ -114,6 +126,7 @@ app.get('/api/transactions', (req, res) => {
 
 app.post('/api/transactions', (req, res) => {
     const token = req.cookies.token || {};
+    console.log(`post /api/transactions with token: ${JSON.stringify(token)} and entry: ${JSON.stringify(req.body)}`);
     try {
         const {type, amount} = req.body;
         res.send(bank.createEntry(token, type, amount));
