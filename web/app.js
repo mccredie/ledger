@@ -141,9 +141,9 @@ class CreateAccountForm extends React.Component {
           <h2>Create Account</h2>
           <form action="/api/account" method="post" onSubmit={this.handleSubmit}>
             <label for="accountName">Account Name: </label>
-            <input type="text" name="accountName" onChange={this.handleAccountNameChange} value={this.state.accountName}></input>
+            <input type="text" name="accountName" required={true} pattern="^[a-zA-Z0-9]{3}[a-zA-Z0-9]*$" onChange={this.handleAccountNameChange} value={this.state.accountName}></input>
             <label for="password">Password: </label>
-            <input type="password" name="password" onChange={this.handlePasswordChange} value={this.state.password}></input>
+            <input type="password" name="password" required={true} pattern="^.{4}.*$" onChange={this.handlePasswordChange} value={this.state.password}></input>
             <button>Create Account</button>
           </form>
           {this.renderCreated()}
@@ -195,7 +195,7 @@ class TransactionForm extends React.Component {
         super(props);
         this.state = {
             type: 'deposit',
-            amount: 0
+            amount: 1
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -213,7 +213,7 @@ class TransactionForm extends React.Component {
               <option value="withdraw">Withdraw</option>
             </select>
             <label for="amount">Amount: </label>
-            <input type="number" name="amount" min="1" step="1" onChange={this.handleAmountChange}></input>
+            <input type="number" name="amount" min="1" step="1" value={this.state.amount} onChange={this.handleAmountChange}></input>
             <button>Create Transaction</button>
           </form>
         </div>);

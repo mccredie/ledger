@@ -37,7 +37,8 @@ TODO:
   * [x] Better server side validation
   * [x] CLI validation
   * [x] make cli work with password fields
-  * [ ] Web/Forms validation
+  * [x] Web/Forms validation
+  * [ ] Handle account creation failure case on web
   * [ ] minimal css styling
   * [ ] More unit testing - at lest the other repo
   * [ ] look into removing cookie parser and url parser (I think they are built into express)
