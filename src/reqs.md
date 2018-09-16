@@ -40,9 +40,8 @@ TODO:
   * [x] Web/Forms validation
   * [x] Handle account creation failure case on web
   * [x] minimal css styling
-  * [ ] More unit testing - at lest the other repo
-  * [ ] look into removing cookie parser and url parser (I think they are built into express)
-  * [ ] look into using crypto algs for password storage pbkdf2 and token hmac-sha256
+  * [x] More unit testing - at lest the other repo
+  * [x] look into using crypto algs for password storage pbkdf2 and token hmac-sha256
   * [ ] test from scratch
   * [ ] check into github
   * [ ] README

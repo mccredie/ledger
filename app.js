@@ -1,7 +1,8 @@
 
-const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
 
+const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 
@@ -12,7 +13,7 @@ const { TokenAuthor } = require('./src/TokenAuthor');
 
 const accountRepo = new InMemoryAccountRepo();
 const ledgerRepo = new InMemoryLedgerRepo();
-const tokenAuthor = new TokenAuthor(accountRepo);
+const tokenAuthor = new TokenAuthor(accountRepo, crypto.randomBytes(64));
 const bank = new Bank(accountRepo, ledgerRepo, tokenAuthor);
 
 const app = express();
@@ -60,7 +61,7 @@ app.get('/api/account', (req, res) => {
 });
 
 app.post('/api/account', (req, res) => {
-    console.log(`post /api/account with: ${JSON.stringify(req.body)} -- create account`);
+    console.log(`post /api/account with '${req.body.accountName}' -- create account`);
     try {
         const {accountName, password} = req.body;
         res.send(bank.createAccount(accountName, password));
@@ -87,7 +88,7 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    console.log(`post /login with ${JSON.stringify(req.body)} -- generating token`);
+    console.log(`post /login with '${req.body.accountName}' -- generating token`);
     try {
         const { accountName, password } = req.body;
         const token = bank.getToken(accountName, password);

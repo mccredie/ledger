@@ -1,25 +1,34 @@
 
+const crypto = require('crypto');
+
 class TokenAuthor {
-    constructor(accountRepo) {
+    constructor(accountRepo, secret) {
         this.accountRepo = accountRepo;
+        this.secret = secret;
     }
 
     validateToken(token, cb) {
-        let account;
-        try {
-            account = this.accountRepo.getAccountById(token.id);
-        } catch(e) {
+        if (token && token.hmac && token.hmac == generateHmac(this.secret, token.id)) {
+            return cb(token.id);
+        } else {
             throw new Error("AccessDenied");
         }
-        return cb(account.id);
     }
 
     generateToken(accountName, password) {
-        const account = this.accountRepo.getAccountByName(accountName);
-        if (account.password == password) {
-            return {id: account.id};;
+        const {id, salt, iterations, keylen, digest, key} = this.accountRepo.getAccountByName(accountName);
+        const derivedKey = crypto.pbkdf2Sync(password, salt, iterations, keylen, digest).toString('hex');
+        const hmac = generateHmac(this.secret, id);
+        if (derivedKey == key) {
+            return {id, hmac};;
         }
     }
 }
+
+const generateHmac = (secret, value) => (
+    crypto.createHmac('sha256', secret)
+                    .update(JSON.stringify(value))
+                    .digest('hex')
+);
 
 module.exports = { TokenAuthor };

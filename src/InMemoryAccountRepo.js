@@ -1,4 +1,6 @@
 
+const crypto = require('crypto');
+
 
 
 class InMemoryAccountRepo {
@@ -11,10 +13,19 @@ class InMemoryAccountRepo {
             const account = findAccount(this.accounts, name);
             if (!account) {
                 const id = this.accounts.length;
+                const salt = crypto.randomBytes(20).toString('hex');
+                const iterations = 10000;
+                const keylen = 64;
+                const digest = 'sha512';
+                const key = crypto.pbkdf2Sync(password, salt, iterations, keylen, digest).toString('hex');
                 const newAccount = {
                     id: id,
                     name,
-                    password
+                    salt,
+                    iterations,
+                    keylen,
+                    digest,
+                    key
                 };
                 this.accounts.push(newAccount);
                 return newAccount;

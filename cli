@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const crypto = require('crypto');
+
 const { Bank } = require('./src/Bank');
 const { TokenAuthor } = require("./src/TokenAuthor");
 const { LocalBankProxy } = require('./src/LocalBankProxy');
@@ -60,7 +62,7 @@ const printUsageAndExit = code => {
 const makeLocalBankProxy = () => {
     const accountRepo = new InMemoryAccountRepo();
     const ledgerRepo = new InMemoryLedgerRepo();
-    const tokenAuthor = new TokenAuthor(accountRepo);
+    const tokenAuthor = new TokenAuthor(accountRepo, crypto.randomBytes(64));
     const bank = new Bank(accountRepo, ledgerRepo, tokenAuthor);
     return new LocalBankProxy(bank);
 };
