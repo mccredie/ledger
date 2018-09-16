@@ -40,7 +40,9 @@ node ./server
 
 ### Run Command Line Tool
 
-By default the command line tool will run against the server at `http://localhost:3000`. Use the `--local` option to run the cli without the server. Use the `--help` option for more info.
+By default the command line tool will run against the server at 
+`http://localhost:3000`. Use the `--local` option to run the cli 
+without the server. Use the `--help` option for more info.
 
 ```bash
 ./cli
@@ -70,7 +72,8 @@ think the added complexity was worth the effort. Babel is used to enable the
 portable. A side effect of using babel, but no bundler, is that all of the UI
 javascript is in a single file. This was done soley to simplify the build.
 
-For the cli I used a library called `inquirer` to create some _fancy_ menus.  I also used `request-promise-native` for making http requests.
+For the cli I used a library called `inquirer` to create some _fancy_ menus.
+I also used `request-promise-native` for making http requests.
 
 `jest` was used for unit testing.
 
@@ -80,7 +83,9 @@ This whole design started with the `InMemoryAccountsRepo` and the
 `InMemoryLedgerRepo`. These classes are intended to provide an interface that
 could easily be reimplemented around a real database.  
 
-The `Bank` class was developed as a Facade around the repos to perform the basic operations of the application.  The original implementation of the command line interface called an instance of the bank class dirrectly.
+The `Bank` class was developed as a Facade around the repos to perform the
+basic operations of the application.  The original implementation of the
+command line interface called an instance of the bank class dirrectly.
 
 The `TokenAuthor` was introduced later when it became obvious that too much
 of the logic for validating credentials was spread between the `Bank` and the
@@ -103,9 +108,9 @@ should be trivial to add a decorator for the Ledger repo to check the balance
 and disallow withdrawls if they result in a negative balance. This would also
 require a mutex on the table.
 
-I will emulates tables similar to a RDB. This was mostly because I thought it
-would be useful to show a design as I would do in production, with a repo
-class wrapping all database operations. At least this keeps the state nice
+State is stored as tables that could emulate an RDB. This was mostly because I 
+thought it would be useful to show a design as I would do in production, with 
+a repo class wrapping all database operations. At least this keeps the state nice
 and contained. Since the repos are injected into the bank class at the main
 entry point, it would be trivial to implement another class with the same
 interface that uses an actual database.
@@ -120,21 +125,25 @@ The server specific code is all in `./server`.
 
 The web client is all in a single file (discussed above) `./web.js`
 
-The command line is mostly implemented in `src/CommandLineInterface.js`, but the main entry point is `./cli`
+The command line is mostly implemented in `src/CommandLineInterface.js`, but
+the main entry point is `./cli`
 
 ## Toward Production
 
 So, you want to make this horizontally scalable so that it can work in
-production behind an auto-scaler, or even put it into AWS lambda. This is what you need to do:
+production behind a load balancer, or even put it into AWS lambda. This is 
+what you need to do:
 
-1. Get a real database, and implement the *repos* to work with that database.
-This new implementation should pass the same unit tests though.
+1. Get a real database, and implement the *repos* to work with that database. 
+The same unit tests that I wrote should be valid for another implemetation.
 2. Make it configurable. My preference is to use environment variables (see
 the 12 factor app). Currently the secret used for generating hmacs for the
-tokens is randomly generated every time the server starts. It should either
-be passed in, or somehow shared.
-3. We should either use JWTs instead of the dumb token scheme I came up with,
-or at least something that expires.
+tokens is randomly generated every time the server starts. This won't work for 
+horizontally scaling, it will need to be generated once and passed in.
+3. We should either use JWTs instead of the simple token scheme I came up with,
+or at least use something that expires.  There are plenty of options for
+handling sessions.
 
 Obviously there are a load of improvements to be made to the UI, but I won't
-get into those.
+get into those.  Just know that I didn't do much in terms of translating
+errors to useful messages.
