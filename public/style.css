@@ -1,0 +1,27 @@
+table.transactions {
+    background-color: #EEEEEE;
+    width: 100%;
+    text-align: left;
+  }
+  table.transactions td, table.transactions th {
+    border: 1px solid #AAAAAA;
+    padding: 3px 2px;
+  }
+  table.transactions tbody td {
+    font-size: 13px;
+  }
+  table.transactions tr:nth-child(even) {
+    background: #FFFFFF;
+  }
+  table.transactions thead {
+    background: #525252;
+  }
+  table.transactions thead th {
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFFFFF;
+  }
+
+  input:invalid {
+    box-shadow: 0 0 5px 1px red;
+  }

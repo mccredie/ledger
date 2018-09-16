@@ -128,7 +128,7 @@ class CreateAccountForm extends React.Component {
         this.state = {
             accountName: "",
             password: "",
-            createdAccounts: [],
+            createdAccount: null,
             error: false
         }
 
@@ -152,13 +152,8 @@ class CreateAccountForm extends React.Component {
         </div>);
     }
     renderCreated() {
-        if (this.state.createdAccounts.length) {
-            return (<div>
-                <h2>Created Accounts</h2>
-                <ul>
-                    {this.state.createdAccounts.map(name => <li>{name}</li>)}
-                </ul>
-            </div>);
+        if (this.state.createdAccount) {
+            return <div className="account-added">Account Added: <em>{this.state.createdAccount}</em></div>;
         }
     }
     handleAccountNameChange(e) {
@@ -188,9 +183,9 @@ class CreateAccountForm extends React.Component {
         xhr.onloadend = (e) => {
             const account = JSON.parse(xhr.response);
             if (account.error) {
-                this.setState({error: true, accountName: "", password: ""});
+                this.setState({error: true, accountName: "", password: "", createdAccount: null});
             } else {
-                this.setState({createdAccounts: this.state.createdAccounts.concat([account.name]), accountName: "", password: "", error: false});
+                this.setState({createdAccount: account.name, accountName: "", password: "", error: false});
             }
         };
     }
@@ -216,7 +211,7 @@ class TransactionForm extends React.Component {
             <label for="type">Transaction Type: </label>
             <select name="type" onChange={this.handleTypeChange}>
               <option value="deposit">Deposit</option>
-              <option value="withdraw">Withdraw</option>
+              <option value="withdrawl">Withdraw</option>
             </select>
             <label for="amount">Amount: </label>
             <input type="number" name="amount" min="1" step="1" value={this.state.amount} onChange={this.handleAmountChange}></input>
@@ -255,18 +250,21 @@ class TransactionForm extends React.Component {
 }
 
 const Balance = ({balance}) => (
-    <div>Balance <em>{balance}</em></div>
+    <div>Balance <em>${balance}</em></div>
 );
 
 const History = ({history}) => {
     let runningTotal = 0;
-    return <table>
-        <tr>
-            <th>#</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Balance</th>
-        </tr>
+    return <table className="transactions">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
         {history.map((entry, i) => {
             switch(entry.type) {
                 case 'withdrawl':
@@ -283,6 +281,7 @@ const History = ({history}) => {
                 <td>${runningTotal}</td>
             </tr>
         })}
+        </tbody>
     </table>;
 }
 
