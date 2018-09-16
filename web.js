@@ -1,4 +1,3 @@
-'use strict';
 
 class App extends React.Component {
     constructor(props) {
@@ -102,24 +101,18 @@ class App extends React.Component {
 
 }
 
-class LoginAccountForm extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
-        <div>
-          <h2>Login</h2>
-          <form action="/login" method="post" >
-            <label for="accountName">Account Name: </label>
-            <input type="text" name="accountName"></input>
-            <label for="password">Password: </label>
-            <input type="password" name="password"></input>
-            <button>Login</button>
-          </form>
-        </div>);
-    }
-}
+const LoginAccountForm = () => ( 
+    <div>
+        <h2>Login</h2>
+        <form action="/login" method="post" >
+        <label for="accountName">Account Name: </label>
+        <input type="text" name="accountName"></input>
+        <label for="password">Password: </label>
+        <input type="password" name="password"></input>
+        <button>Login</button>
+        </form>
+    </div>
+);
 
 class CreateAccountForm extends React.Component {
     constructor(props) {
@@ -135,6 +128,8 @@ class CreateAccountForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAccountNameChange = this.handleAccountNameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleInvalidPassword = this.handleInvalidPassword.bind(this);
+        this.handleInvalidAccount = this.handleInvalidAccount.bind(this);
     }
     render() {
         return (
@@ -142,9 +137,9 @@ class CreateAccountForm extends React.Component {
           <h2>Create Account</h2>
           <form action="/api/account" method="post" onSubmit={this.handleSubmit}>
             <label for="accountName">Account Name: </label>
-            <input type="text" name="accountName" required={true} pattern="^[a-zA-Z0-9]{3}[a-zA-Z0-9]*$" onChange={this.handleAccountNameChange} value={this.state.accountName}></input>
+            <input type="text" name="accountName" required={true} pattern="^\w{4}\w*$" onInvalid={this.handleInvalidAccount} onChange={this.handleAccountNameChange} value={this.state.accountName}></input>
             <label for="password">Password: </label>
-            <input type="password" name="password" required={true} pattern="^.{4}.*$" onChange={this.handlePasswordChange} value={this.state.password}></input>
+            <input type="password" name="password" required={true} pattern="^.{4}.*$" onInvalid={this.handleInvalidPassword} onChange={this.handlePasswordChange} value={this.state.password}></input>
             <button>Create Account</button>
           </form>
           {this.state.error? <p><em>Error Creating Account</em></p>: null}
@@ -157,10 +152,18 @@ class CreateAccountForm extends React.Component {
         }
     }
     handleAccountNameChange(e) {
+        e.target.setCustomValidity("");
         this.setState({accountName: e.target.value});
     }
     handlePasswordChange(e) {
+        e.target.setCustomValidity("");
         this.setState({password: e.target.value});
+    }
+    handleInvalidAccount(e) {
+        e.target.setCustomValidity("The account name must be at least 4 characters long and consist of only letters, numbers or underscore ('_')");
+    }
+    handleInvalidPassword(e) {
+        e.target.setCustomValidity("The password must be at least 4 characters long")
     }
     handleSubmit(e) {
         // stop the regular form submission
