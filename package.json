@@ -2,12 +2,10 @@
   "name": "ledger",
   "version": "1.0.0",
   "description": "A banking ledger code example",
-  "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build-web": "babel ./web --out-dir ./public/js --presets react-app/dev",
-    "watch-web": "babel --watch ./web --out-dir ./public/js --presets react-app/dev",
-    "serve": "node ./app.js"
+    "build": "babel ./web.js --out-dir ./public/js --presets react-app/dev",
+    "serve": "./server"
   },
   "author": "Matt McCredie",
   "license": "ISC",
