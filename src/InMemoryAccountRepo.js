@@ -59,5 +59,4 @@ const validAccountCredentials = (accountName, password) => (
     isValidAccountName(accountName) && isValidPassword(password)
 )
 
-
 module.exports = { InMemoryAccountRepo };

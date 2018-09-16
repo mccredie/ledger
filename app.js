@@ -11,7 +11,7 @@ const { InMemoryAccountRepo } = require('./src/InMemoryAccountRepo');
 const { TokenAuthor } = require('./src/TokenAuthor');
 
 const accountRepo = new InMemoryAccountRepo();
-const ledgerRepo = new InMemoryLedgerRepo(accountRepo);
+const ledgerRepo = new InMemoryLedgerRepo();
 const tokenAuthor = new TokenAuthor(accountRepo);
 const bank = new Bank(accountRepo, ledgerRepo, tokenAuthor);
 

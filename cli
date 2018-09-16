@@ -59,7 +59,7 @@ const printUsageAndExit = code => {
 
 const makeLocalBankProxy = () => {
     const accountRepo = new InMemoryAccountRepo();
-    const ledgerRepo = new InMemoryLedgerRepo(accountRepo);
+    const ledgerRepo = new InMemoryLedgerRepo();
     const tokenAuthor = new TokenAuthor(accountRepo);
     const bank = new Bank(accountRepo, ledgerRepo, tokenAuthor);
     return new LocalBankProxy(bank);

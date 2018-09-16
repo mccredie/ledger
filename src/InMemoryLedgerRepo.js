@@ -4,12 +4,11 @@ const WITHDRAWL = 'withdrawl';
 
 
 class InMemoryLedgerRepo {
-    constructor(accountRepo) {
-        this.accountRepo = accountRepo;
+    constructor() {
         this.ledger = [];
     }
 
-    async createEntry(id, {type, amount}) {
+    createEntry(id, {type, amount}) {
         switch(type) {
             case DEPOSIT:
             case WITHDRAWL:

@@ -12,9 +12,10 @@ describe("InMemoryAccountRepo", () => {
     it("Should throw error if the account already exists", () => {
         const repo = new InMemoryAccountRepo();
         const accountName = "myAccount";
+        const password = "password"
 
-        repo.createAccount(accountName, 'password');
-        expect(() => repo.createAccount(accountName, 'password')).toThrow(Error(`DuplicateAccount '${accountName}'`));
+        repo.createAccount(accountName, password);
+        expect(() => repo.createAccount(accountName, password)).toThrow(Error('ValidationError'));
     })
     it("Should be able to create multiple accounts with unique names", () => {
         const repo = new InMemoryAccountRepo();
@@ -23,7 +24,7 @@ describe("InMemoryAccountRepo", () => {
 
 
         for(let i = 0; i < numAccounts; ++i) {
-            const account = repo.createAccount(`accountName-${i}`, 'password');
+            const account = repo.createAccount(`accountName${i}`, 'password');
             createdAccountIds.add(account.name); 
         }
     
@@ -31,24 +32,7 @@ describe("InMemoryAccountRepo", () => {
 
     })
   })
-  describe(".getToken", () => {
-    let repo;
-    const accountName = "myAccount";
-    const password = "myPassword";
-
-    beforeEach(() => {
-        repo = new InMemoryAccountRepo();
-        repo.createAccount(accountName, password);
-    });
-
-    it("should fail with an authentication error if the password is wrong", () => {
-        expect(() => repo.getToken(accountName, 'abadpassword')).toThrow(Error("AccessDenied"));
-    });
-    it("should fail with an authentication error if the account doesn't exist", () => {
-        expect(() => repo.getToken('newAccountThatDoesNotExist', '12345')).toThrow(Error("AccessDenied"));
-    })
-  })
-  describe(".getAccount", () => {
+  describe(".getAccountById", () => {
     let repo;
     const accountName = "myAccount";
     const password = "myPassword";
@@ -57,14 +41,29 @@ describe("InMemoryAccountRepo", () => {
         repo = new InMemoryAccountRepo();
         existingAccount = repo.createAccount(accountName, password);
     })
-    it("should retrieve the name for an account given a token", () => {
-        const token = repo.getToken(accountName, password);
-        const account = repo.getAccount(token);
-
+    it("should retrieve the account given a id", () => {
+        const account = repo.getAccountById(existingAccount.id);
         expect(account).toEqual(existingAccount);
     })
-    it("should thow error for invalid token", () => {
-        expect(() => repo.getAccount({id: 123})).toThrow(new Error("NotFound"));
+    it("should thow error for invalid id", () => {
+        expect(() => repo.getAccountById(123)).toThrow(new Error("NotFound"));
+    })
+  })
+  describe(".getAccountByName", () => {
+    let repo;
+    const accountName = "myAccount";
+    const password = "myPassword";
+    let existingAccount;
+    beforeEach(() => {
+        repo = new InMemoryAccountRepo();
+        existingAccount = repo.createAccount(accountName, password);
+    })
+    it("should retrieve the account given a id", () => {
+        const account = repo.getAccountByName(accountName);
+        expect(account).toEqual(existingAccount);
+    })
+    it("should thow error for invalid id", () => {
+        expect(() => repo.getAccountByName("borf")).toThrow(new Error("NotFound"));
     })
   })
 })
